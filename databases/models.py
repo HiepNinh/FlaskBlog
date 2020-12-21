@@ -4,6 +4,7 @@ from extensions import login_manager
 from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+import os
 
 
 @login_manager.user_loader
@@ -50,10 +51,11 @@ class Post(db.Model):
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
+    image_file = db.Column(db.String(20), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
     def __repr__ (self):
-        return f"Post('{self.title}', '{self.date_posted}', '{self.content}')"
+        return f"Post('{self.title}', '{self.date_posted}', '{self.content}', '{self.image_file}')"
     
     @property
     def serialized(self):
@@ -61,7 +63,8 @@ class Post(db.Model):
         return {
             'title': self.title,
             'date_posted': str(self.date_posted),
-            'content': self.content
+            'content': self.content,
+            'image_file': os.path.join(current_app.root_path, 'static/post_pics', self.image_file)
         }
     
     

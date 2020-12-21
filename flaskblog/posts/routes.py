@@ -9,6 +9,7 @@ from flask_login import current_user, login_required
 from databases import db
 from databases.models import Post
 from flaskblog.posts.forms import PostForm
+from flaskblog.posts.utils import save_picture
 
 
 posts = Blueprint('posts', __name__)
@@ -19,7 +20,8 @@ posts = Blueprint('posts', __name__)
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        picture_fn = None if form.picture.data is None else save_picture(form.picture.data)
+        post = Post(title=form.title.data, content=form.content.data, image_file=picture_fn, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('You just have posted successfully', 'success')
@@ -41,8 +43,10 @@ def update_post(post_id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        picture_fn = None if form.picture.data is None else save_picture(form.picture.data)
         post.title = form.title.data
         post.content = form.content.data
+        post.image_file = post.image_file if picture_fn is None else picture_fn
         db.session.commit()
         flash('You just have updated post successfully', 'success')
         return redirect(url_for('posts.view_post', post_id=post.id))
