@@ -1,5 +1,6 @@
 venv/
 .vscode/
+site.db
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
