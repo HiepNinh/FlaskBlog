@@ -1,10 +1,9 @@
-from flask import current_app
+from flask import current_app, url_for
 from . import db
 from extensions import login_manager
 from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-import os
 
 
 @login_manager.user_loader
@@ -64,7 +63,7 @@ class Post(db.Model):
             'title': self.title,
             'date_posted': str(self.date_posted),
             'content': self.content,
-            'image_file': os.path.join(current_app.root_path, 'static/post_pics', self.image_file)
+            'image_file': url_for('static', filename='post_pics/' + self.image_file)
         }
     
     
