@@ -8,7 +8,9 @@
               <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
               <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
             </div>
-            <img class="w-100 p-3 d-block" src="{{ url_for('static', filename='post_pics/' + post.image_file) }}">
+            {% if not post.image_file is none %}
+                <img class="w-100 p-3 d-block" src="{{ url_for('static', filename='post_pics/' + post.image_file) }}">
+            {% endif %}
             <h2><a class="article-title" href="{{ url_for('posts.view_post', post_id=post.id) }}">{{ post.title }}</a></h2>
           </div>
         </article>

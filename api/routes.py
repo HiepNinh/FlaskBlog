@@ -9,4 +9,4 @@ def initialize_routes(api):
     api.add_resource(UserApi, '/api/v1/me')
     
     api.add_resource(PostsApi, '/api/v1/posts')
-    api.add_resource(PostApi, '/api/v1/post/<id>')
+    api.add_resource(PostApi, '/api/v1/post')

@@ -13,7 +13,9 @@
               </div>
           {% endif %}
         </div>
-        <img class="w-100 p-3 d-block" src="{{ url_for('static', filename='post_pics/' + post.image_file) }}">
+        {% if not post.image_file is none %}
+          <img class="w-100 p-3 d-block" src="{{ url_for('static', filename='post_pics/' + post.image_file) }}">
+        {% endif %}
         <h2 class="article-title">{{ post.title }}</h2>
         <p class="article-content">{{ post.content }}</p>
       </div>

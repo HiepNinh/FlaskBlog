@@ -12,7 +12,14 @@ class PostsApi(Resource):
         page_size = request.args.get('page_size', 5, type=int)
         posts = [result.serialized for result in Post.query.paginate(page=page, per_page=page_size).items]
         return posts, 200
-    
+
+
+class PostApi(Resource):
+    def get(self):
+        body = request.get_json()
+        post = Post.query.get_or_404(int(body.get('id')))
+        return post.serialized, 200
+
     @jwt_required
     def post(self):
         user_id = get_jwt_identity()
@@ -21,28 +28,23 @@ class PostsApi(Resource):
         db.session.add(post)
         db.session.commit()
         return {'id': str(post.id)}, 200
-
-
-class PostApi(Resource):
-    def get(self, id):
-        post = Post.query.get_or_404(id)
-        return post.serialized, 200
     
     @jwt_required
-    def put(self, id):
-        post = Post.query.get_or_404(id)
+    def put(self):
+        body = request.get_json()
+        post = Post.query.get_or_404(int(body.get('id')))
         user_id = get_jwt_identity()
         if int(post.user_id) != int(user_id):
             return {'error': "You don't have permission"}, 403
-        body = request.get_json()
         post.title = body.get('title')
         post.content = body.get('content')
         db.session.commit()
         return '', 200
     
     @jwt_required
-    def delete(self, id):
-        post = Post.query.get_or_404(id)
+    def delete(self):
+        body = request.get_json()
+        post = Post.query.get_or_404(int(body.get('id')))
         user_id = get_jwt_identity()
         if int(post.user_id) != int(user_id):
             return {'error': "You don't have permission"}, 403
