@@ -63,7 +63,8 @@ class Post(db.Model):
             'title': self.title,
             'date_posted': str(self.date_posted),
             'content': self.content,
-            'image_file': None if self.image_file is None else url_for('static', filename='post_pics/' + self.image_file)
+            'image_file': None if self.image_file is None else url_for('static', filename='post_pics/' + self.image_file),
+            'author': self.author.username
         }
     
     
